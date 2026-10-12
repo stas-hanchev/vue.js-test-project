@@ -4,6 +4,7 @@
 
 @theme {
     --color-primary: #f3743d;
+    --color-gray: #939393;
 }
 
 :root {
