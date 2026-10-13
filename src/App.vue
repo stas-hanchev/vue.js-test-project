@@ -1,29 +1,40 @@
 <script setup>
-import { ref } from 'vue';
-// import HomepageView from '@/views/HomepageView.vue';
-// import FavoritePlaces from './components/FavoritePlaces/FavoritePlaces.vue';
-import IModal from './components/Auth/IModal/IModal.vue';
-import RegistrationForm from './components/Auth/Registration/RegistrationForm.vue';
-import LoginForm from './components/Auth/Login/LoginForm.vue';
+import { MapboxMap } from '@studiometa/vue-mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import FavoritePlaces from './components/FavoritePlaces/FavoritePlaces.vue';
+import { mapSettings } from './map/settings';
 
-const isOpen = ref(false);
-
-const closeModal = () => {
-    isOpen.value = false;
-};
-
-const openModal = () => {
-    isOpen.value = true;
-};
+const favoritePlaces = [
+    {
+        id: 1,
+        title: 'New place 1',
+        description: 'SUper description 1',
+        img: '',
+        lngLat: [],
+    },
+    {
+        id: 2,
+        title: 'New place 2',
+        description: 'SUper description 2',
+        img: '',
+        lngLat: [],
+    },
+];
 </script>
 
 <template>
-    <!-- <HomepageView /> -->
-    <!-- <div class="bg-white h-screen w-100">
-        <FavoritePlaces />
-    </div> -->
-    <button @click="openModal">Click me</button>
-    <RegistrationForm @submit="console.log" />
-    <LoginForm @submit="console.log"></LoginForm>
-    <IModal v-if="isOpen" @close="closeModal"></IModal>
+    <main class="flex h-screen">
+        <div class="bg-white h-full w-100 shrink-0 overflow-auto pb-10">
+            <FavoritePlaces :items="favoritePlaces" />
+        </div>
+        <div class="w-full h-full flex items-center justify-center text-6xl">
+            <MapboxMap
+                class="w-full h-full"
+                :center="[30.523333, 50.450001]"
+                :zoom="10"
+                :access-token="mapSettings.apiToken"
+                :map-style="mapSettings.style"
+            ></MapboxMap>
+        </div>
+    </main>
 </template>
