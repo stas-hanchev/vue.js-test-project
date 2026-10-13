@@ -13,6 +13,10 @@ const props = defineProps({
         type: String,
     },
     img: String,
+    isActive: {
+        required: true,
+        type: Boolean,
+    },
 });
 </script>
 
@@ -34,6 +38,9 @@ const props = defineProps({
             </div>
         </div>
 
-        <div class="h-px w-full bg-[#ececec] mt-4"></div>
+        <div
+            class="h-px w-full bg-[#ececec] mt-4"
+            :class="{ 'bg-primary': props.isActive, 'bg-[#ececec]': !props.isActive }"
+        ></div>
     </section>
 </template>
