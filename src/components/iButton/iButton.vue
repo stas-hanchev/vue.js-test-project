@@ -10,6 +10,10 @@ const props = defineProps({
             return ['primary', 'gradient', 'outlined'].includes(value);
         },
     },
+    to: {
+        type: [String, Object],
+        default: undefined,
+    },
 });
 
 const bgStyles =
