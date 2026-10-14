@@ -6,7 +6,7 @@ import IButton from '@/components/IButton/IButton.vue';
 
 const props = defineProps({
     isLoading: {
-        defaulte: false,
+        default: false,
         type: Boolean,
     },
 });

@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, computed } from 'vue';
+import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 
 const props = defineProps({
@@ -40,6 +40,7 @@ const link = computed(() => {
         class="bg-[#FFA279] rounded-xl py-3 px-10 text-white font-bold tracking-tighter"
         :class="bgStyles"
         :to="link"
+        :disabled="isLink ? undefined : isLoading"
     >
         <template v-if="isLoading">Loading...</template>
         <template v-else><slot></slot></template>
