@@ -1,8 +1,8 @@
 <script setup>
 import { useModal } from '@/composables/useModal.js';
 
-import FavoritePlace from '../FavoritePlace/FavoritePlace.vue';
-import EditPlaceModal from '../EditPlaceModal/EditPlaceModal.vue';
+import FavoritePlace from '@/components/FavoritePlace/FavoritePlace.vue';
+import EditPlaceModal from '@/components/EditPlaceModal/EditPlaceModal.vue';
 import IButton from '@/components/IButton/IButton.vue';
 
 const props = defineProps({

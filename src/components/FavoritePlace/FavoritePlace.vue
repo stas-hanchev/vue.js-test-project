@@ -19,7 +19,7 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits[('edit', 'delete')];
+const emit = defineEmits(['edit', 'delete']);
 </script>
 
 <template>

@@ -16,7 +16,7 @@ const activeId = ref(null);
 const map = ref(null);
 const mapMarkerLngLat = ref(null);
 
-const { isOpen, openModal, closeModal } = useModal;
+const { isOpen, openModal, closeModal } = useModal();
 
 const { data, mutation: getPlaces } = useMutation({
     mutationFn: () => getFavoritePlaces(),
@@ -94,9 +94,7 @@ onMounted(async () => {
                 @mb-created="(mapInstance) => (map = mapInstance)"
             >
                 <MapboxMarker v-if="mapMarkerLngLat" :lngLat="mapMarkerLngLat" anchor="bottom">
-                    <button @click="changeActiveId(place.id)">
-                        <MarkerIcon class="h-8 w-8" />
-                    </button>
+                    <MarkerIcon class="h-8 w-8" />
                 </MapboxMarker>
                 <MapboxMarker
                     v-for="place in favoritePlaces"
