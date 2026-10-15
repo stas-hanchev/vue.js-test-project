@@ -18,6 +18,8 @@ const props = defineProps({
         type: Boolean,
     },
 });
+
+const emit = defineEmits[('edit', 'delete')];
 </script>
 
 <template>
@@ -28,8 +30,12 @@ const props = defineProps({
                 <div class="flex justify-between items-center mb-2">
                     <h2 class="font-bold text-sm text-[#2C2C2C]">{{ props.title }}</h2>
                     <div class="flex gap-2">
-                        <FavoritePlaceIconButton><EditIcon /></FavoritePlaceIconButton>
-                        <FavoritePlaceIconButton><DeleteIcon /></FavoritePlaceIconButton>
+                        <FavoritePlaceIconButton>
+                            <EditIcon @click="emit('edit')" />
+                        </FavoritePlaceIconButton>
+                        <FavoritePlaceIconButton>
+                            <DeleteIcon @click="emit('delete')" />
+                        </FavoritePlaceIconButton>
                     </div>
                 </div>
                 <p class="text-xs line-clamp-3">

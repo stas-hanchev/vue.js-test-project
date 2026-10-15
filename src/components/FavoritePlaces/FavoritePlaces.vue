@@ -1,5 +1,8 @@
 <script setup>
+import { useModal } from '@/composables/useModal.js';
+
 import FavoritePlace from '../FavoritePlace/FavoritePlace.vue';
+import EditPlaceModal from '../EditPlaceModal/EditPlaceModal.vue';
 import IButton from '@/components/IButton/IButton.vue';
 
 const props = defineProps({
@@ -9,11 +12,13 @@ const props = defineProps({
     },
     activeId: {
         required: true,
-        type: [Number, null],
+        type: [String, null],
     },
 });
 
 const emit = defineEmits(['place-clicked', 'create']);
+
+const { isOpen: isEditOpen, openModal: openEditModal, closeModal: closeEditModal } = useModal();
 </script>
 
 <template>
@@ -30,8 +35,10 @@ const emit = defineEmits(['place-clicked', 'create']);
                 :img="place.img"
                 :is-active="place.id === props.activeId"
                 @click="emit('place-clicked', place.id)"
+                @edit="openEditModal"
             />
         </slot>
+        <EditPlaceModal :is-open="isEditOpen" @close="closeEditModal" />
         <slot></slot>
         <IButton class="w-full mt-10" variant="gradient" @click="emit('create')">
             Додати маркер
