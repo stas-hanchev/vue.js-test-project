@@ -18,6 +18,6 @@ export const updateFavoritePlace = async (body) => {
     return clientFetch.put(BASE_PLACES_URL, body);
 };
 
-export const deleteFavoritePlaces = async (body) => {
-    return clientFetch.delete(BASE_PLACES_URL, body);
+export const deleteFavoritePlace = async (id) => {
+    return clientFetch.delete(`${BASE_PLACES_URL}/${id}`);
 };
