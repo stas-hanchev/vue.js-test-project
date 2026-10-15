@@ -13,7 +13,7 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(['place-clicked']);
+const emit = defineEmits(['place-clicked', 'create']);
 </script>
 
 <template>
@@ -33,6 +33,8 @@ const emit = defineEmits(['place-clicked']);
             />
         </slot>
         <slot></slot>
-        <IButton class="w-full mt-10" variant="gradient">Додати маркер</IButton>
+        <IButton class="w-full mt-10" variant="gradient" @click="emit('create')">
+            Додати маркер
+        </IButton>
     </div>
 </template>
