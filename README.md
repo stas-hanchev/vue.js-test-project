@@ -1,44 +1,33 @@
-# .
+# Favorite Places
 
-This template should help get you started developing with Vue 3 in Vite.
+A Vue 3 app for saving favorite places on a map.
 
-## Recommended IDE Setup
+**Stack:** Vue 3, Vue Router, Vuex, Axios, Mapbox GL, Tailwind CSS, Vite.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Requirements
 
-## Recommended Browser Setup
+Node.js `^22.18.0` or `>=24.12.0`.
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+## Setup
 
 ```sh
 npm install
+cp .env.example .env
 ```
 
-### Compile and Hot-Reload for Development
+Fill in `.env`:
+
+| Variable           | Description                  |
+| ------------------ | ---------------------------- |
+| `VITE_BACKEND_API` | Backend API base URL         |
+| `VITE_MAP_TOKEN`   | Mapbox public access token   |
+
+## Scripts
 
 ```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
+npm run dev      # start dev server
+npm run build    # production build
+npm run preview  # preview production build
+npm run lint     # oxlint + eslint
+npm run format   # prettier
 ```
