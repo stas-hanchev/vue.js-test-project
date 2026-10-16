@@ -1,22 +1,18 @@
 <script setup>
-import { onMounted } from 'vue';
-
-import { useMutation } from '@/composables/useMutation.js';
-import { getUserInfo } from '@/api/user/index.js';
+import { computed, onMounted } from 'vue';
+import { useStore } from 'vuex';
 
 import UserIcon from './UserIcon.vue';
 
-const {
-    data: userInfo,
-    mutation: getUser,
-    isLoading,
-    // error,
-} = useMutation({
-    mutationFn: () => getUserInfo(),
-});
+const store = useStore();
+
+const user = computed(() => store.state.user.user);
+const isLoading = computed(() => store.state.user.isLoading);
 
 onMounted(() => {
-    getUser();
+    if (!user.value) {
+        store.dispatch('user/fetchUser');
+    }
 });
 </script>
 
@@ -30,6 +26,6 @@ onMounted(() => {
             <UserIcon class="text-white" />
         </div>
         <span v-if="isLoading">Loading...</span>
-        <span v-if="userInfo">{{ userInfo.data.name }}</span>
+        <span v-if="user">{{ user.name }}</span>
     </div>
 </template>

@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
+import { useStore } from 'vuex';
 import { MapboxMap, MapboxMarker } from '@studiometa/vue-mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -9,46 +10,38 @@ import { useMutation } from '@/composables/useMutation';
 import FavoritePlaces from '@/components/FavoritePlaces/FavoritePlaces.vue';
 import { mapSettings } from '@/map/settings';
 import MarkerIcon from '@/components/icons/MarkerIcon.vue';
-import { addFavoritePlace, getFavoritePlaces } from '@/api/favorite-places';
 import CreateNewPlaceModal from '@/components/CreateNewPlaceModal/CreateNewPlaceModal.vue';
 import UserInfo from '@/components/UserInfo/UserInfo.vue';
 import LogoutButton from '@/components/LogoutButton/LogoutButton.vue';
 
-const activeId = ref(null);
+const store = useStore();
+
 const map = ref(null);
 const mapMarkerLngLat = ref(null);
 
+const favoritePlaces = computed(() => store.state.favoritePlaces.places);
+const isPlacesLoading = computed(() => store.state.favoritePlaces.isLoading);
+
 const { isOpen, openModal, closeModal } = useModal();
-
-const {
-    data,
-    mutation: getPlaces,
-    isLoading: isPlacesLoading,
-} = useMutation({
-    mutationFn: () => getFavoritePlaces(),
-});
-
-const favoritePlaces = computed(() => data.value ?? []);
 
 const {
     mutation: addPlace,
     isLoading: isAddingPlace,
     error: hasAddingPlaceError,
 } = useMutation({
-    mutationFn: (newPlaceData) => addFavoritePlace(newPlaceData),
+    mutationFn: (newPlaceData) => store.dispatch('favoritePlaces/addPlace', newPlaceData),
     onSuccess: () => {
         closeModal();
         mapMarkerLngLat.value = null;
-        getPlaces();
     },
 });
 
 const changeActiveId = (id) => {
-    activeId.value = id;
+    store.commit('favoritePlaces/SET_ACTIVE_ID', id);
 };
 
 const changePlace = (id) => {
-    const { coordinates } = favoritePlaces.value.find((place) => place.id === id);
+    const { coordinates } = store.getters['favoritePlaces/getPlaceById'](id);
     changeActiveId(id);
     map.value.flyTo({ center: coordinates });
 };
@@ -70,8 +63,8 @@ const handleAddPlace = async (formData, resetForm) => {
     }
 };
 
-onMounted(async () => {
-    getPlaces();
+onMounted(() => {
+    store.dispatch('favoritePlaces/fetchPlaces');
 });
 </script>
 
@@ -80,14 +73,7 @@ onMounted(async () => {
         <div class="relative bg-white h-full w-100 shrink-0 overflow-auto pb-10">
             <UserInfo />
             <div v-if="isPlacesLoading" class="text-black px-6">Loading...</div>
-            <FavoritePlaces
-                :items="favoritePlaces"
-                :activeId="activeId"
-                :is-loading="isPlacesLoading"
-                @place-clicked="changePlace"
-                @create="openModal"
-                @updated="getPlaces"
-            />
+            <FavoritePlaces @place-clicked="changePlace" @create="openModal" />
             <LogoutButton class="mt-10" />
             <CreateNewPlaceModal
                 :is-open="isOpen"

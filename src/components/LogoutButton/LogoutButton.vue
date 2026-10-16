@@ -1,19 +1,16 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import { useMutation } from '@/composables/useMutation.js';
 
-import { authService } from '@/api/authService/index.js';
-import { logout } from '@/api/user/index.js';
 import LogoutIcon from './LogoutIcon.vue';
 
 const router = useRouter();
+const store = useStore();
 
 const { mutation: logoutUser, isLoading } = useMutation({
-    mutationFn: () => logout(),
-    onSuccess: () => {
-        authService.clearToken();
-        router.replace('/auth/login');
-    },
+    mutationFn: () => store.dispatch('auth/logout'),
+    onSuccess: () => router.replace('/auth/login'),
 });
 </script>
 

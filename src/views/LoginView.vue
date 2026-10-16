@@ -1,18 +1,19 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import { useMutation } from '@/composables/useMutation';
 
 import LoginForm from '@/components/Auth/Login/LoginForm.vue';
-import { authService } from '@/api/authService';
 
 const router = useRouter();
+const store = useStore();
 
 const {
     isLoading,
     error,
     mutation: handleLogin,
 } = useMutation({
-    mutationFn: (data) => authService.login(data),
+    mutationFn: (data) => store.dispatch('auth/login', data),
     onSuccess: () => router.replace('/map'),
 });
 </script>

@@ -5,26 +5,17 @@ import FavoritePlace from '@/components/FavoritePlace/FavoritePlace.vue';
 import EditPlaceModal from '@/components/EditPlaceModal/EditPlaceModal.vue';
 import IButton from '@/components/IButton/IButton.vue';
 import { computed, ref } from 'vue';
+import { useStore } from 'vuex';
 import { useMutation } from '@/composables/useMutation';
-import { deleteFavoritePlace, updateFavoritePlace } from '@/api/favorite-places';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal.vue';
 
-const props = defineProps({
-    items: {
-        required: true,
-        type: Array,
-    },
-    activeId: {
-        required: true,
-        type: [String, null],
-    },
-    isLoading: {
-        type: Boolean,
-        default: false,
-    },
-});
+const emit = defineEmits(['place-clicked', 'create']);
 
-const emit = defineEmits(['place-clicked', 'create', 'updated']);
+const store = useStore();
+
+const items = computed(() => store.state.favoritePlaces.places);
+const activeId = computed(() => store.state.favoritePlaces.activeId);
+const isLoading = computed(() => store.state.favoritePlaces.isLoading);
 
 const {
     isOpen: isEditModalOpen,
@@ -38,10 +29,9 @@ const {
 } = useModal();
 
 const { mutation: updatePlace, isLoading: isUpdating } = useMutation({
-    mutationFn: (formData) => updateFavoritePlace(formData),
+    mutationFn: (formData) => store.dispatch('favoritePlaces/updatePlace', formData),
     onSuccess: () => {
         closeEditModal();
-        emit('updated');
     },
 });
 
@@ -52,17 +42,16 @@ const {
     isLoading: isDeleting,
     error: deleteError,
 } = useMutation({
-    mutationFn: () => deleteFavoritePlace(idOfDeletedItem.value),
+    mutationFn: () => store.dispatch('favoritePlaces/deletePlace', idOfDeletedItem.value),
     onSuccess: () => {
         closeConfirmationModal();
         idOfDeletedItem.value = null;
-        emit('updated');
     },
 });
 
 const selectedId = ref(null);
 
-const selectedItem = computed(() => props.items.find((place) => place.id === selectedId.value));
+const selectedItem = computed(() => store.getters['favoritePlaces/getPlaceById'](selectedId.value));
 
 const handleEditPlace = (id) => {
     selectedId.value = id;
@@ -88,16 +77,16 @@ const handleDeletePlace = () => {
         <div class="text-gray mb-4">Додані маркери</div>
         <slot name="label"></slot>
         <slot name="list">
-            <div v-if="props.items.length === 0 && !isLoading" class="px-6 text-black">
+            <div v-if="items.length === 0 && !isLoading" class="px-6 text-black">
                 Список порожній
             </div>
             <FavoritePlace
-                v-for="place in props.items"
+                v-for="place in items"
                 :key="place.id"
                 :title="place.title"
                 :description="place.description"
                 :img="place.img"
-                :is-active="place.id === props.activeId"
+                :is-active="place.id === activeId"
                 @click="emit('place-clicked', place.id)"
                 @edit="handleEditPlace(place.id)"
                 @delete="handleOpenConfirmationModal(place.id)"

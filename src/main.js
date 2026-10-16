@@ -1,21 +1,17 @@
 import './assets/main.css';
 
 import { createApp } from 'vue';
-import { createPinia } from 'pinia';
+import { store } from './store';
 import { router } from './router';
-import { authService, TOKEN_KEY } from './api/authService';
+import { setupInterceptors } from './api/interceptors';
 
 import App from './App.vue';
 
-const token = localStorage.getItem(TOKEN_KEY);
-
-if (token) {
-    authService.setToken(token);
-}
+setupInterceptors(store, router);
 
 const app = createApp(App);
 
-app.use(createPinia());
+app.use(store);
 app.use(router);
 
 app.mount('#app');
