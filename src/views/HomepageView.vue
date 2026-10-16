@@ -11,6 +11,8 @@ import { mapSettings } from '@/map/settings';
 import MarkerIcon from '@/components/icons/MarkerIcon.vue';
 import { addFavoritePlace, getFavoritePlaces } from '@/api/favorite-places';
 import CreateNewPlaceModal from '@/components/CreateNewPlaceModal/CreateNewPlaceModal.vue';
+import UserInfo from '@/components/UserInfo/UserInfo.vue';
+import LogoutButton from '@/components/LogoutButton/LogoutButton.vue';
 
 const activeId = ref(null);
 const map = ref(null);
@@ -72,7 +74,8 @@ onMounted(async () => {
 
 <template>
     <main class="flex h-screen">
-        <div class="bg-white h-full w-100 shrink-0 overflow-auto pb-10">
+        <div class="relative bg-white h-full w-100 shrink-0 overflow-auto pb-10">
+            <UserInfo />
             <div v-if="isPlacesLoading" class="text-black px-6">Loading...</div>
             <FavoritePlaces
                 :items="favoritePlaces"
@@ -82,6 +85,7 @@ onMounted(async () => {
                 @create="openModal"
                 @updated="getPlaces"
             />
+            <LogoutButton class="mt-10" />
             <CreateNewPlaceModal
                 :is-open="isOpen"
                 :is-loading="isAddingPlace"

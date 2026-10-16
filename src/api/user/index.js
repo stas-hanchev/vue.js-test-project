@@ -15,3 +15,7 @@ export const logout = async () => {
 export const refresh = async () => {
     return clientFetch.get('/user/refresh');
 };
+
+export const getUserInfo = () => {
+    return clientFetch.get('/user/me');
+}
