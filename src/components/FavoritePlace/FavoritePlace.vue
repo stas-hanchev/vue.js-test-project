@@ -33,7 +33,7 @@ const emit = defineEmits(['edit', 'delete']);
                     <h2 class="font-bold text-sm text-[#2C2C2C]">{{ props.title }}</h2>
                     <div class="flex gap-2">
                         <FavoritePlaceIconButton>
-                            <EditIcon @click="emit('edit')" />
+                            <EditIcon @click.stop="emit('edit')" />
                         </FavoritePlaceIconButton>
                         <FavoritePlaceIconButton>
                             <DeleteIcon @click.stop="emit('delete')" />

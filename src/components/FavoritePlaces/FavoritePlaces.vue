@@ -79,7 +79,7 @@ const handleOpenConfirmationModal = (id) => {
 };
 
 const handleDeletePlace = () => {
-    deletePlace(idOfDeletedItem);
+    deletePlace();
 };
 </script>
 

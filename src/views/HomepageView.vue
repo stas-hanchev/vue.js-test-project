@@ -64,7 +64,10 @@ const handleAddPlace = async (formData, resetForm) => {
     };
 
     await addPlace(body);
-    resetForm();
+
+    if (!hasAddingPlaceError.value) {
+        resetForm();
+    }
 };
 
 onMounted(async () => {

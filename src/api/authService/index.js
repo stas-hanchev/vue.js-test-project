@@ -3,6 +3,8 @@ import { router } from '@/router';
 
 export const TOKEN_KEY = 'token';
 
+const NO_REFRESH_URLS = ['/user/login', '/user/register', '/user/refresh'];
+
 class AuthService {
     #token = null;
 
@@ -70,17 +72,24 @@ clientFetch.interceptors.request.use((request) => {
 clientFetch.interceptors.response.use(
     (response) => response,
     async (error) => {
-        const errorCode = error.response.status;
+        const originalRequest = error.config;
+        const errorCode = error.response?.status;
+        const isAuthRequest = NO_REFRESH_URLS.includes(originalRequest?.url);
 
-        if (errorCode === 401) {
-            try {
-                return await authService.refresh();
-            } catch (err) {
-                router.push('/auth/login/');
-                return Promise.reject(err);
-            }
+        if (errorCode !== 401 || isAuthRequest || originalRequest._retry) {
+            return Promise.reject(error);
         }
 
-        return Promise.reject(error);
+        originalRequest._retry = true;
+
+        try {
+            await authService.refresh();
+        } catch (err) {
+            authService.clearToken();
+            router.push('/auth/login');
+            return Promise.reject(err);
+        }
+
+        return clientFetch(originalRequest);
     },
 );
